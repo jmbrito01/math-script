@@ -1,4 +1,5 @@
 var Lexer = require('../lexer');
+var Error = require('../error');
 
 function Parser(expression) {
     this.lexer = new Lexer(expression);
@@ -7,7 +8,7 @@ function Parser(expression) {
 
 /**
  * Execute the expression in order to extract it's result.
- * @returns {Number}
+ * @returns {Object}
  */
 Parser.prototype.execute = function execute() {
     if (this.lexer.isSingleSided()) {
@@ -15,8 +16,7 @@ Parser.prototype.execute = function execute() {
         return this.parse(this.analysis);
     } else {
         //Separate left and right side
-        var sides = this.splitSides(this.analysis);
-        return this.parse(sides.right);
+        throw "Double sided functions are not available yet.";
     }
 };
 
@@ -31,7 +31,13 @@ Parser.prototype.parse = function parse(analysis) {
     for (var i = biggest;i > 0;i--) {
         result.analysis = this.simplify(result.analysis, i);
     }
-    result.result = result.analysis[0].value;
+    if (result.analysis.length === 1) {
+        //Single result
+        switch (result.analysis[0].type) {
+            case 'number': result.result = result.analysis[0].value;
+                break;
+        }
+    }
     return result;
 };
 

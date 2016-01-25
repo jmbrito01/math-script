@@ -42,7 +42,7 @@ Lexer.prototype.getDividerIndex = function getDeviderIndex() {
  * @returns {boolean} True if it's a number, false otherwise.
  */
 Lexer.prototype.isNumber = function isNumber(number) {
-    if (!number) this.number = this.expression;
+    if (!number) number = this.expression;
     return !isNaN(parseFloat(number)) && isFinite(number);
 };
 
@@ -51,11 +51,23 @@ Lexer.prototype.isNumber = function isNumber(number) {
  * @param symbol
  * @returns {boolean} True if it's a symbol, false otherwise
  */
-Lexer.prototype.isSymbol = function isSymbol(symbol) {
+Lexer.prototype.isSymbol = function isSymbol(idx) {
+    var symbol = this.expression[idx];
     if (symbol == syntax['divider']) return true;
     else {
         for (var i in syntax.operations) {
-            if (syntax.operations[i].operator == symbol) return true;
+            var each = syntax.operations[i];
+            if (each.operator && each.operator === symbol) return true;
+            else if (each.operator_sequence && each.operator_sequence[0] === symbol) {
+                var valid = true;
+                for (var j in each.operator_sequence) {
+                    if (this.expression[idx+parseInt(j)] !== each.operator_sequence[parseInt(j)]) {
+                        valid = false;
+                        break;
+                    }
+                }
+                return valid;
+            }
         }
     }
     return false;
@@ -66,11 +78,33 @@ Lexer.prototype.isSymbol = function isSymbol(symbol) {
  * @param operator - The operator you want to search
  * @returns {Operator} the operator from syntax.js you searched or null if not found
  */
-Lexer.prototype.getSymbol = function getSymbol(operator) {
+Lexer.prototype.getSymbol = function getSymbol(idx) {
+    var result = null;
+    var operator = this.expression[idx];
     for (var i in syntax.operations) {
-        if (syntax.operations[i].operator === operator) return syntax.operations[i];
+        var op_syntax = syntax.operations[i].operator_sequence;
+        if (op_syntax) {
+            var op_arg = this.expression.slice(idx);
+            if (op_arg.length > op_syntax.length) {
+                var valid = true;
+                for (var j in op_syntax) {
+                    if (op_arg[j] !== op_syntax[j]) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) {
+                    result = syntax.operations[i];
+                    break;
+                }
+            }
+        }
+        else if (syntax.operations[i].operator === operator) {
+            if (!result) result = syntax.operations[i];
+        }
     }
-    return null;
+    return result;
+
 };
 
 /**
@@ -133,11 +167,15 @@ Lexer.prototype.analyse = function analyse() {
             i += length-1;
         }
         //Check if it's a symbol
-        else if (this.isSymbol(this.expression[i])) {
+        else if (this.isSymbol(i)) {
+            var symbol = this.getSymbol(i);
+            if (symbol.operator_sequence) {
+                i += symbol.operator_sequence.length-1;
+            }
             result.push({
                 type: this.expression[i] === syntax['divider'] ? 'divider':'symbol',
                 value: this.expression[i],
-                operation: this.getSymbol(this.expression[i])
+                operation: symbol
             });
         }
         //Check if it's a variable

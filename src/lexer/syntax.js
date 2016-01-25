@@ -44,6 +44,30 @@ module.exports = {
             operator: '^',
             priority: 3,
             exec: (args) => { return Math.pow(args[0], args[1]); }
+        },
+        //Binary AND
+        {
+            operator: '&',
+            priority: 1,
+            exec: (args) => { return args[0] & args[1]; }
+        },
+        //Binary OR
+        {
+            operator: '|',
+            priority: 1,
+            exec: (args) => { return args[0] | args[1]; }
+        },
+        //Binary Left Shift
+        {
+            operator_sequence: ['<', '<'],
+            priority: 1,
+            exec: (args) => { return args[0] << args[1]; }
+        },
+        //Binary Right Shift
+        {
+            operator_sequence: ['>', '>'],
+            priority: 1,
+            exec: (args) => { return args[0] >> args[1]; }
         }
     ]
 };

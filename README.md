@@ -3,11 +3,23 @@
 math-script is a very simplistic scriipting language to
 interpret common mathematical expressions.
 
+## How to Use
+    var MathScript = require('math-script');
+
+    var script = new MathScript();
+    console.log(`The result of 2+2 = ${script.execute('2 + 2')}`);
+    //The result of 2+2 = 4
+
 ## Changelog:
 
-**Version 1:**
+**Version 1.0.0**
 * Simple math operations (add, sub, mult, div, pow)
 * Support for parenthesis, brackets and braces
+
+**Version 1.1.0**
+* Added support for multi-character symbols(symbols
+that are more than one character long)
+* Simple binary operations (and, or, left and right shift)
 
 ## License
 The MIT License (MIT)
