@@ -43,6 +43,8 @@ before the variable name. For example:
 ### Library References
 
 #### execute(expression)
+Executes a MathScript code.
+
 **Parameters:**
 * expression: The math script expression you want to execute
 
@@ -51,6 +53,8 @@ before the variable name. For example:
 **Examples:** Check examples/simplest
 
 #### getVariable(variable)
+Retrieves a variable's value from the context
+
 **Parameters:**
 * variable: The name of the variable to be retrieved.
 
@@ -59,6 +63,8 @@ before the variable name. For example:
 **Examples:** Check examples/variables
 
 #### setVariable(variable, value)
+Sets a variable's value from the context
+
 **Parameters:**
 * variable: The name of the variable
 * value: The new value to be set in the variable
@@ -67,6 +73,25 @@ before the variable name. For example:
 
 **Examples:** Check examples/variables
 
+#### saveContext(file)
+Exports the current context to a file
+
+**Parameters:**
+* file: The filename where the context will be saved
+
+**Result:** A promise.
+
+**Examples:** Not available yet.
+
+#### saveContextSync(file)
+The same as saveContext but sync.
+
+**Parameters:**
+* file: The filename where the context will be saved
+
+**Result:** None.
+
+**Examples:** Not available yet.
 
 ## Examples
 This project is filled with examples, you can check them on
@@ -89,6 +114,7 @@ that are more than one character long)
 **Version 1.2.0**
 * Added support for variables
 * Added example examples/variables
+* Export/Import the vm context
 
 ## License
 The MIT License (MIT)

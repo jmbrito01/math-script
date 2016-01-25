@@ -34,4 +34,23 @@ MathScript.prototype.setVariable = function setVariable(variable, value) {
     this.context.setValue(variable, value);
 };
 
+/**
+ * Saves the current state of the context in a file
+ * @param file - The filename of the file
+ * @returns {Promise}
+ */
+MathScript.prototype.saveContext = function(file) {
+    return new Promise(function(resolve, reject) {
+        this.context.saveToFile(file).then(resolve, reject);
+    });
+};
+
+/**
+ * Does the same as saveContext but all sync.
+ * @param file - The filename of the file
+ */
+MathScript.prototype.saveContextSync = function(file) {
+    return this.context.saveToFileSync(file);
+};
+
 module.exports = MathScript;
