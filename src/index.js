@@ -39,8 +39,8 @@ MathScript.prototype.setVariable = function setVariable(variable, value) {
  * @param file - The filename of the file
  * @returns {Promise}
  */
-MathScript.prototype.saveContext = function(file) {
-    return new Promise(function(resolve, reject) {
+MathScript.prototype.saveContext = function saveContext(file) {
+    return new Promise((resolve, reject) => {
         this.context.saveToFile(file).then(resolve, reject);
     });
 };
@@ -49,8 +49,27 @@ MathScript.prototype.saveContext = function(file) {
  * Does the same as saveContext but all sync.
  * @param file - The filename of the file
  */
-MathScript.prototype.saveContextSync = function(file) {
+MathScript.prototype.saveContextSync = function saveContextSync(file) {
     return this.context.saveToFileSync(file);
+};
+
+/**
+ * Loads the context from a file
+ * @param file - the filename of the context
+ * @returns {Promise}
+ */
+MathScript.prototype.loadContext = function loadContext(file) {
+    return new Promise((resolve, reject) => {
+        this.context.loadFromFile(file).then(resolve, reject);
+    });
+};
+
+/**
+ * Does the same as loadContext but sync
+ * @param file - The filename of the file
+ */
+MathScript.prototype.loadContextSync = function loadContextSync(file) {
+    this.context.loadFromFileSync(file);
 };
 
 module.exports = MathScript;

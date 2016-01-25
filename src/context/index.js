@@ -28,7 +28,7 @@ Context.prototype.getValue = function getValue(variable) {
  * @returns {Promise}
  */
 Context.prototype.saveToFile = function saveToFile(file) {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         var buffer = new Buffer(JSON.stringify(this.variables));
         fs.writeFile(file, buffer.toString('base64'), (err) => {
             if (err) reject(err);
@@ -44,6 +44,31 @@ Context.prototype.saveToFile = function saveToFile(file) {
 Context.prototype.saveToFileSync = function saveToFileSync(file) {
     var buffer = new Buffer(JSON.stringify(this.variables));
     fs.writeFileSync(file, buffer.toString('base64'));
+};
+
+/**
+ * Loads a context from a file
+ * @param file - the filename of the context to be loaded.
+ * @returns {Promise}
+ */
+Context.prototype.loadFromFile = function loadFromFile(file) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(file, (err, data) => {
+            if (err) reject(err);
+            else {
+                //Converts the data from UInt8Array to String and then convert it to String before parsing as JSON
+                this.variables = JSON.parse(new Buffer(String.fromCharCode.apply(null, data), 'base64').toString('ascii'));
+            }
+        });
+    });
+};
+
+/**
+ * Does the same as loadFromFile but sync.
+ * @param file - The filename of the context to be loaded
+ */
+Context.prototype.loadFromFileSync = function loadFromFileSync(file) {
+    this.variables = JSON.parse(new Buffer(fs.readFileSync(file), 'base64').toString('ascii'));
 };
 
 module.exports = Context;

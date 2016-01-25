@@ -81,7 +81,7 @@ Exports the current context to a file
 
 **Result:** A promise.
 
-**Examples:** Not available yet.
+**Examples:** Check examples/variables
 
 #### saveContextSync(file)
 The same as saveContext but sync.
@@ -93,11 +93,32 @@ The same as saveContext but sync.
 
 **Examples:** Not available yet.
 
+#### loadContex(file)
+Loads a context from a file to the memory
+
+**Parameters:**
+* file: The filename where the context is.
+
+**Result:** A Promise.
+
+**Examples:** Check examples/variables
+
+#### loadContexSync(file)
+Loads a context from a file to the memory
+
+**Parameters:**
+* file: The filename where the context is.
+
+**Result:** None.
+
+**Examples:** Not available yet.
+
 ## Examples
 This project is filled with examples, you can check them on
 the source code in the examples directory.
 * **simplest:** The hello world of the library, the simplest
 code you can do using the math-script library
+* **variables:** Introduction to variable handling in mathscript
 
 
 ## Changelog:
