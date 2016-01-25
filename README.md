@@ -10,6 +10,24 @@ interpret common mathematical expressions.
     console.log(`The result of 2+2 = ${script.execute('2 + 2')}`);
     //The result of 2+2 = 4
 
+
+## API References
+
+### execute(expression)
+**Parameters:**
+* expression: The math script expression you want to execute
+
+**Result:** is the result of the expression
+
+**Examples:** Check examples/simplest
+
+## Examples
+This project is filled with examples, you can check them on
+the source code in the examples directory.
+* **simplest:** The hello world of the library, the simplest
+code you can do using the math-script library
+
+
 ## Changelog:
 
 **Version 1.0.0**
