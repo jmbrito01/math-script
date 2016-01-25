@@ -1,5 +1,6 @@
 module.exports = {
     divider: '=',
+    variable: '$',
     separators: [
         {
             symbols: ['{', '}'],

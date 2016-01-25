@@ -1,9 +1,10 @@
 var Lexer = require('../lexer');
 var Error = require('../error');
 
-function Parser(expression) {
+function Parser(expression, context) {
     this.lexer = new Lexer(expression);
     this.analysis = this.lexer.analyse();
+    this.context = context;
 }
 
 /**
@@ -16,7 +17,25 @@ Parser.prototype.execute = function execute() {
         return this.parse(this.analysis);
     } else {
         //Separate left and right side
-        throw "Double sided functions are not available yet.";
+        var sides = this.splitSides(this.analysis);
+        var analysisSides = {
+            right: this.parse(sides.right),
+            left: this.parse(sides.left)
+        };
+        //Lets handle the results of the two sides
+        switch (analysisSides.left.type) {
+            case 'variable':
+                switch (analysisSides.right.type) {
+                    case 'number': //variable = number
+                        this.context.setValue(analysisSides.left.result, analysisSides.right.result);
+                        return analysisSides.right;
+                    case 'variable': //variable = variable
+                        this.context.setValue(analysisSides.left.result, this.context.getValue(analysisSides.right.result));
+                        return analysisSides.right.result;
+                }
+                break;
+        }
+
     }
 };
 
@@ -34,7 +53,13 @@ Parser.prototype.parse = function parse(analysis) {
     if (result.analysis.length === 1) {
         //Single result
         switch (result.analysis[0].type) {
-            case 'number': result.result = result.analysis[0].value;
+            case 'number':
+                result.result = result.analysis[0].value;
+                result.type = 'number';
+                break;
+            case 'variable':
+                result.result = result.analysis[0].value;
+                result.type = 'variable';
                 break;
         }
     }
@@ -78,6 +103,31 @@ Parser.prototype.getBiggestPriority = function getBiggestPriority(analysis) {
 };
 
 /**
+ * Checks if an analysis object is a valid argument object.
+ * @param arg - The analysis object you want to check
+ * @returns {boolean}
+ */
+Parser.prototype.isValidArgument = function isValidArgument(arg) {
+    return typeof arg === 'object' && (arg.type === 'number' || arg.type === 'variable');
+};
+
+/**
+ * Retrieves the value of an analysis object
+ * @param arg - The analysis object you want the value of
+ * @returns {Number}
+ */
+Parser.prototype.getValue = function getValue(arg) {
+    switch (arg.type) {
+        case 'number':
+            return arg.value;
+        case 'variable':
+            return this.context.getValue(arg.value);
+        default:
+            return null;
+    }
+};
+
+/**
  * Simplifies the operations in a analysis
  * @param analysis
  * @param priority - The priority you want to simplify from the expression
@@ -93,12 +143,12 @@ Parser.prototype.simplify = function(analysis, priority) {
                     //Thats the type of symbol we need to simplify
                     var before = analysis[i - 1];
                     var after = analysis[parseInt(i) + 1]; //Javascript somehow understands the i in there as a string
-                    if (before && after && before.type === 'number' && after.type === 'number') {
+                    if (this.isValidArgument(before) && this.isValidArgument(after)) {
                         //There are all the arguments we need
                         result.pop(); //Erases 'before' from the results as it'll be simplified
                         result.push({
                             type: 'number',
-                            value: parseFloat(each.operation.exec([before.value, after.value]))
+                            value: parseFloat(each.operation.exec([this.getValue(before), this.getValue(after)]))
                         });
                         i++; //Skip the 'after' number because it's already handled.
                     }
@@ -129,9 +179,7 @@ Parser.prototype.mapVariables = function mapVariables(analysis) {
     var variables = {};
     for (var i in analysis) {
         var each = analysis[i];
-        if (each.type === 'variable') {
-
-        }
+        if (each.type === 'variable') variables[each.value] = 0;
     }
 };
 

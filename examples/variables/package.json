@@ -1,7 +1,7 @@
 {
-  "name": "simplest",
+  "name": "variables",
   "version": "1.0.0",
-  "description": "The simplest example for using math-script",
+  "description": "Handling with variables on math-script",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

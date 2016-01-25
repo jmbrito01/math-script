@@ -6,7 +6,6 @@ function Lexer(expression) {
     this.expression = expression.replace(/ /g, "");
 }
 
-
 /**
  * Retrieves the left side of the expression
  */
@@ -108,12 +107,13 @@ Lexer.prototype.getSymbol = function getSymbol(idx) {
 };
 
 /**
- * Checks if a expression character is variable. It actually just check if the character is a letter
+ * Checks if a expression character is variable.
  * @param variable - The variable to be checked
  * @returns {boolean} true is its a variable, false otherwise.
  */
 Lexer.prototype.isVariable = function isVariable(variable) {
-    return variable.match(/[a-zA-Z]/) !== null;
+    return variable === syntax.variable;
+    //return variable.match(/[a-zA-Z]/) !== null;
 };
 
 /**
@@ -169,7 +169,7 @@ Lexer.prototype.analyse = function analyse() {
         //Check if it's a symbol
         else if (this.isSymbol(i)) {
             var symbol = this.getSymbol(i);
-            if (symbol.operator_sequence) {
+            if (symbol && symbol.operator_sequence) {
                 i += symbol.operator_sequence.length-1;
             }
             result.push({
@@ -180,9 +180,14 @@ Lexer.prototype.analyse = function analyse() {
         }
         //Check if it's a variable
         else if (this.isVariable(this.expression[i])) {
+            //Get the entire variable name (Match until not alphabet)
+            var end = this.expression.slice(i).search(/(?![$a-zA-Z])/);
+
+            var varName = this.expression.slice(i, i+end);
+            i += varName.length-1;
             result.push({
                 type: 'variable',
-                value: this.expression[i]
+                value: varName
             });
         }
         //Check if it's a separator

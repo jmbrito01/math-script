@@ -4,22 +4,69 @@ math-script is a very simplistic scriipting language to
 interpret common mathematical expressions.
 
 ## How to Use
+
     var MathScript = require('math-script');
 
     var script = new MathScript();
     console.log(`The result of 2+2 = ${script.execute('2 + 2')}`);
+    script.execute('$x = (4 * 3) + 15');
+    console.log(`$x equals to ${script.getVariable('$x')}`);
     //The result of 2+2 = 4
+    //$x equals to 27
 
+## MathScript References
+### Operators
+**operator_name (syntax)**
+* Add(+)
+* Subtract(-)
+* Divide(/)
+* Multiply (*)
+* Power (^)
+* Left Shift (<<)
+* Right Shift (>>)
+* Bitwise AND (&)
+* Bitwise OR (|)
 
-## API References
+### Variables
+Variables in MathScript are designed to be very simple, no
+need for initialization(the first time you use it will
+be mapped in the memory). To use them you only need one thing,
+specify that it is a variable. To do that, use the symbol $
+before the variable name. For example:
 
-### execute(expression)
+    $myvar = 15
+    $otherVar = $myvar + 15
+
+**REMEMBER: Variables are case-sensitive,
+`$myvar` is not equal to `$MYVAR`**
+
+### Library References
+
+#### execute(expression)
 **Parameters:**
 * expression: The math script expression you want to execute
 
 **Result:** is the result of the expression
 
 **Examples:** Check examples/simplest
+
+#### getVariable(variable)
+**Parameters:**
+* variable: The name of the variable to be retrieved.
+
+**Result:** is the value of the variable
+
+**Examples:** Check examples/variables
+
+#### setVariable(variable, value)
+**Parameters:**
+* variable: The name of the variable
+* value: The new value to be set in the variable
+
+**Result:** None
+
+**Examples:** Check examples/variables
+
 
 ## Examples
 This project is filled with examples, you can check them on
@@ -39,9 +86,13 @@ code you can do using the math-script library
 that are more than one character long)
 * Simple binary operations (and, or, left and right shift)
 
+**Version 1.2.0**
+* Added support for variables
+* Added example examples/variables
+
 ## License
 The MIT License (MIT)
-Copyright (c) 2016 João Marcelo Brito<joaomarcelobrito01@gmail.com>
+Copyright (c) 2016 João Marcelo Brito
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
