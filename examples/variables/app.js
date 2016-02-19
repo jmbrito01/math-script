@@ -11,7 +11,7 @@ console.log(script.getVariable('$result'));
 script.saveContext('context.cx').then(() => {
     var otherScript = new MathScript();
     otherScript.loadContext('context.cx').then(() => {
-        console.log(script.getVariable('$result'));
+        console.log(otherScript.getVariable('$result'));
     }, (err) => {
         throw err;
     });

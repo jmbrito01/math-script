@@ -149,7 +149,6 @@ Lexer.prototype.getSeparator = function getSeparator(separator) {
  */
 Lexer.prototype.analyse = function analyse() {
     var result = [];
-    //TODO: Check for parenthesis operations
     //TODO: Check for functions (sen(), cos(), tan())
     //Loop through all characters of the expression
     for (var i = 0;i < this.expression.length;i++) {

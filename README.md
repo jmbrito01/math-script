@@ -1,6 +1,6 @@
 # math-script
 
-math-script is a very simplistic scriipting language to
+math-script is a very simplistic scripting language to
 interpret common mathematical expressions.
 
 ## How to Use
@@ -26,6 +26,13 @@ interpret common mathematical expressions.
 * Right Shift (>>)
 * Bitwise AND (&)
 * Bitwise OR (|)
+
+### Separators
+* (Parenthesis) are the first expressions to be parsed
+* [Braces] is parsed right after parethesis
+* {Curly braces} are the last ones to be parsed before the
+"outside" expression
+
 
 ### Variables
 Variables in MathScript are designed to be very simple, no
